@@ -1,34 +1,48 @@
-                                        PROJECT NAME -: TaskMatrix
+# TaskMatrix
 
-PROJECT DESCRIPTION : TaskMatrix is a modern project management platform inspired by Jira and Asana. It enables teams to manage projects, track tasks, assign team members, monitor deadlines, and collaborate efficiently.
+## Overview
 
-Track: FRONTEND DEVELOPER
+TaskMatrix is a modern project management platform inspired by Jira and Asana. It enables teams to create projects, manage tasks, track deadlines, assign team members, and monitor project progress through an intuitive dashboard.
 
-Tech Stack:
-Next.js 16
-React 19
-Tailwind CSS
-Shadcn UI
-Zustand
-Axios
-React DnD
-Recharts
+## Track
 
-Core Features:
+Frontend Developer
 
-Phase 1-
-Login/Register UI
-Dashboard
-Project Management
-Kanban Board
-Task Details Page
+## Tech Stack
 
-Phase 2-
-Team Management
-Activity Feed
-Search & Filters
+* Next.js
+* React
+* Tailwind CSS
+* Shadcn UI
+* Zustand
+* Axios
+* React DnD
+* Recharts
 
-Phase 3-
-Analytics Dashboard
-Notifications
-Dark Mode
+## Core Features
+
+### MVP Features
+
+* Authentication UI
+* Dashboard
+* Project Management
+* Kanban Board
+* Task Management
+* Team Management
+
+### Future Features
+
+* Activity Feed
+* Notifications
+* Analytics Dashboard
+* Dark Mode
+
+## Development Timeline
+
+Sprint 14 - MVP
+
+Sprint 15 - CRUD Features
+
+Sprint 16 - Analytics & AI
+
+Sprint 17 - Deployment
