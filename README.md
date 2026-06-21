@@ -37,12 +37,10 @@ Frontend Developer
 * Analytics Dashboard
 * Dark Mode
 
-## Development Timeline
+#Figma link
+https://www.figma.com/design/tPbSNlOazOBvvy6VS64OpQ/TaskMatrix-UI-Design?node-id=0-1&t=INFV4NjQuxUjwrHl-1
 
-Sprint 14 - MVP
 
-Sprint 15 - CRUD Features
+## State Architecture
 
-Sprint 16 - Analytics & AI
-
-Sprint 17 - Deployment
+[State Diagram](./docs/state-diagram.png)
