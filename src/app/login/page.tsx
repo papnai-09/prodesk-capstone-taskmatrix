@@ -14,14 +14,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  // If already logged in, redirect to dashboard
   useEffect(() => {
     if (user) {
       router.push('/dashboard');
     }
   }, [user, router]);
 
-  // Clear errors on mount
   useEffect(() => {
     clearError();
   }, [clearError]);
@@ -48,7 +46,6 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background elements */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl"></div>
 
@@ -67,7 +64,6 @@ export default function LoginPage() {
 
         <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Error alerts */}
             {(validationError || error) && (
               <div className="flex items-center gap-3 rounded-xl bg-red-950/50 border border-red-800/40 p-4 text-sm text-red-400">
                 <AlertCircle className="h-5 w-5 shrink-0" />

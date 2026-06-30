@@ -26,10 +26,8 @@ interface AuthState {
   clearError: () => void;
 }
 
-// Simple cookie helpers for client-side storage
 const setAuthCookie = (token: string) => {
   if (typeof document === 'undefined') return;
-  // Expire in 7 days
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
   document.cookie = `taskmatrix-session=${encodeURIComponent(token)}; expires=${expires}; path=/; SameSite=Lax`;
 };
@@ -68,7 +66,6 @@ export const useAuthStore = create<AuthState>((set) => ({
           deleteAuthCookie();
         }
 
-        // Subscribe to auth state changes
         supabase.auth.onAuthStateChange((_event, session) => {
           if (session && session.user) {
             const userPayload: UserPayload = {
@@ -88,7 +85,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ error: errorMessage, loading: false });
       }
     } else {
-      // Local Mock Mode fallback
       if (typeof window !== 'undefined') {
         const cachedUser = localStorage.getItem('taskmatrix_mock_session');
         if (cachedUser) {
@@ -142,7 +138,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         return false;
       }
     } else {
-      // Local Mock Mode implementation
       return new Promise<boolean>((resolve) => {
         setTimeout(() => {
           try {
@@ -180,7 +175,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             set({ error: 'Mock Sign Up Error: ' + errorMessage, loading: false });
             resolve(false);
           }
-        }, 800); // Simulate network delay
+        }, 800);
       });
     }
   },
@@ -214,7 +209,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         return false;
       }
     } else {
-      // Local Mock Mode implementation
       return new Promise<boolean>((resolve) => {
         setTimeout(() => {
           try {
@@ -246,7 +240,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             set({ error: 'Mock Sign In Error: ' + errorMessage, loading: false });
             resolve(false);
           }
-        }, 800); // Simulate network delay
+        }, 800);
       });
     }
   },

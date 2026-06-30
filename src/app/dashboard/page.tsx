@@ -33,15 +33,13 @@ export default function DashboardPage() {
   };
 
   if (!user) {
-    return null; // Let middleware or useEffect redirect
+    return null;
   }
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
-      {/* Sidebar */}
       <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0">
         <div>
-          {/* Brand */}
           <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-800">
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-600 text-white shadow shadow-indigo-500/20">
               <Sparkles className="h-4 w-4" />
@@ -49,7 +47,6 @@ export default function DashboardPage() {
             <span className="font-bold text-lg text-white tracking-wide">TaskMatrix</span>
           </div>
 
-          {/* Nav Items */}
           <nav className="mt-6 px-4 space-y-1">
             <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-violet-600/10 text-violet-400 font-medium transition duration-200">
               <LayoutDashboard className="h-5 w-5" />
@@ -70,7 +67,6 @@ export default function DashboardPage() {
           </nav>
         </div>
 
-        {/* User Card & Logout */}
         <div className="p-4 border-t border-slate-800 space-y-4">
           <div className="flex items-center gap-3 px-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-500 to-indigo-500 flex items-center justify-center font-bold text-white shadow-sm">
@@ -91,9 +87,7 @@ export default function DashboardPage() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 flex flex-col overflow-y-auto bg-slate-950 relative">
-        {/* Top Header */}
         <header className="h-16 border-b border-slate-850 flex items-center justify-between px-8 bg-slate-950/80 backdrop-blur-md sticky top-0 z-20">
           <div>
             <h1 className="text-xl font-bold text-white">Dashboard Overview</h1>
@@ -103,9 +97,7 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Content Body */}
         <div className="p-8 space-y-8 max-w-7xl w-full mx-auto">
-          {/* Env Warning Banner if running locally with Mock Auth */}
           {!isConfigured && (
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-amber-950/30 border border-amber-900/40 text-amber-300">
               <div className="flex gap-4">
@@ -125,7 +117,6 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Quick Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-slate-900/40 border border-slate-850 p-6 rounded-2xl flex items-center justify-between hover:border-slate-800 transition duration-200">
               <div className="space-y-1">
@@ -168,7 +159,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* User Payload Profile Section (Walking Skeleton Requirement) */}
           <div className="bg-slate-900/50 border border-slate-850 rounded-2xl p-6 space-y-6">
             <div>
               <h3 className="text-lg font-bold text-white">Authenticated Session Payload</h3>
@@ -193,7 +183,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Mock Sprint Tasks */}
           <div className="bg-slate-900/30 border border-slate-850 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-white mb-4">Sprint Backlog Mockup</h3>
             <div className="divide-y divide-slate-850">
