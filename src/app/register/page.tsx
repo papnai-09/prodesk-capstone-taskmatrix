@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
-import { Lock, Mail, User, Loader2, AlertCircle } from 'lucide-react';
+import { Lock, Mail, User, Loader2, AlertCircle, Sparkles } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -57,153 +57,163 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#9bb0b5] px-4 py-12">
-      <div className="w-full max-w-[440px] bg-white rounded-3xl p-10 shadow-xl border border-slate-100">
-        <div className="flex flex-col items-center mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#145d70] uppercase">
-            TaskMATRIX
-          </h1>
-          <h2 className="mt-4 text-xl font-bold text-slate-800">
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 relative overflow-hidden">
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl"></div>
+
+      <div className="w-full max-w-md space-y-8 z-10">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/20 mb-4 animate-pulse">
+            <Sparkles className="h-6 w-6" />
+          </div>
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Create Account
           </h2>
-          <p className="mt-2 text-center text-sm text-slate-500">
-            Join and start collaborating with your team
+          <p className="mt-2 text-center text-sm text-slate-400">
+            Join TaskMatrix and start collaborating
           </p>
         </div>
 
-        {(validationError || error) && (
-          <div className="flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-600 mb-6">
-            <AlertCircle className="h-5 w-5 shrink-0" />
-            <p>{validationError || error}</p>
-          </div>
-        )}
-
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Full Name
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <User className="h-4.5 w-4.5 text-slate-400" />
+        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {(validationError || error) && (
+              <div className="flex items-center gap-3 rounded-xl bg-red-950/50 border border-red-800/40 p-4 text-sm text-red-400">
+                <AlertCircle className="h-5 w-5 shrink-0" />
+                <p>{validationError || error}</p>
               </div>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  clearError();
-                  setValidationError(null);
-                }}
-                className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-3 text-slate-800 placeholder-slate-400 focus:border-[#145d70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#145d70] text-sm transition duration-200"
-                placeholder="John Doe"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Email
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <Mail className="h-4.5 w-4.5 text-slate-400" />
-              </div>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  clearError();
-                  setValidationError(null);
-                }}
-                className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-3 text-slate-800 placeholder-slate-400 focus:border-[#145d70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#145d70] text-sm transition duration-200"
-                placeholder="example@gmail.com"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Password
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <Lock className="h-4.5 w-4.5 text-slate-400" />
-              </div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  clearError();
-                  setValidationError(null);
-                }}
-                className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-3 text-slate-800 placeholder-slate-400 focus:border-[#145d70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#145d70] text-sm transition duration-200"
-                placeholder="Min. 6 characters"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <Lock className="h-4.5 w-4.5 text-slate-400" />
-              </div>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  clearError();
-                  setValidationError(null);
-                }}
-                className="block w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-3 text-slate-800 placeholder-slate-400 focus:border-[#145d70] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#145d70] text-sm transition duration-200"
-                placeholder="••••••••••••"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex w-full justify-center rounded-xl bg-[#145d70] hover:bg-[#0f4756] py-3.5 px-4 text-sm font-bold text-white transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" /> Registering...
-              </span>
-            ) : (
-              'Register'
             )}
-          </button>
-        </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-sm text-slate-500">
-            Already have an account?{' '}
-            <Link
-              href="/login"
-              className="font-bold text-[#145d70] hover:text-[#0f4756] transition duration-200"
-            >
-              Sign In
-            </Link>
-          </p>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-slate-300">
+                  Full Name
+                </label>
+                <div className="relative mt-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <User className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      clearError();
+                      setValidationError(null);
+                    }}
+                    className="block w-full rounded-xl border border-slate-850 bg-slate-950/60 py-3 pl-10 pr-3 text-slate-100 placeholder-slate-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 sm:text-sm transition duration-200"
+                    placeholder="John Doe"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-slate-300">
+                  Email address
+                </label>
+                <div className="relative mt-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Mail className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      clearError();
+                      setValidationError(null);
+                    }}
+                    className="block w-full rounded-xl border border-slate-850 bg-slate-950/60 py-3 pl-10 pr-3 text-slate-100 placeholder-slate-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 sm:text-sm transition duration-200"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+                  Password
+                </label>
+                <div className="relative mt-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Lock className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      clearError();
+                      setValidationError(null);
+                    }}
+                    className="block w-full rounded-xl border border-slate-850 bg-slate-950/60 py-3 pl-10 pr-3 text-slate-100 placeholder-slate-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 sm:text-sm transition duration-200"
+                    placeholder="Min. 6 characters"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300">
+                  Confirm Password
+                </label>
+                <div className="relative mt-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Lock className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      clearError();
+                      setValidationError(null);
+                    }}
+                    className="block w-full rounded-xl border border-slate-850 bg-slate-950/60 py-3 pl-10 pr-3 text-slate-100 placeholder-slate-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 sm:text-sm transition duration-200"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="group relative flex w-full justify-center rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 px-4 text-sm font-semibold text-white hover:from-violet-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 transition duration-200"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Registering...
+                  </span>
+                ) : (
+                  'Register'
+                )}
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-slate-400">
+              Already have an account?{' '}
+              <Link
+                href="/login"
+                className="font-medium text-violet-400 hover:text-violet-300 transition duration-200"
+              >
+                Sign In
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
