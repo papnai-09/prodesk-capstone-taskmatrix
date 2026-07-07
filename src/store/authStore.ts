@@ -7,13 +7,6 @@ export interface UserPayload {
   name: string;
 }
 
-interface MockUser {
-  uid: string;
-  email: string;
-  name: string;
-  password?: string;
-}
-
 interface AuthState {
   user: UserPayload | null;
   loading: boolean;
@@ -47,20 +40,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   initialize: async () => {
     set({ loading: true });
-    
-    if (typeof window !== 'undefined') {
-      const cachedUser = localStorage.getItem('taskmatrix_mock_session');
-      if (cachedUser) {
-        try {
-          const parsed = JSON.parse(cachedUser) as UserPayload;
-          set({ user: parsed, loading: false });
-          setAuthCookie(JSON.stringify(parsed));
-          return;
-        } catch {
-          // ignore parsing error
-        }
-      }
-    }
 
     if (isSupabaseConfigured && supabase) {
       try {
@@ -76,7 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
           return;
         }
       } catch (err) {
-        // ignore init error
+        console.error(err);
       }
     }
 
@@ -87,119 +66,95 @@ export const useAuthStore = create<AuthState>((set) => ({
   signUp: async (name, email, password) => {
     set({ loading: true, error: null });
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.auth.signUp({
+    if (!isSupabaseConfigured || !supabase) {
+      set({ error: 'Supabase credentials are not configured.', loading: false });
+      return false;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { name } },
-      }).catch((err) => {
-        console.warn('Supabase background signup failed:', err);
       });
+
+      if (error) {
+        set({ error: error.message, loading: false });
+        return false;
+      }
+
+      if (data?.user) {
+        const userPayload: UserPayload = {
+          uid: data.user.id,
+          email: data.user.email || '',
+          name: data.user.user_metadata?.name || name,
+        };
+
+        set({ user: userPayload, loading: false });
+        setAuthCookie(JSON.stringify(userPayload));
+        return true;
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown registration error';
+      set({ error: msg, loading: false });
+      return false;
     }
 
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        try {
-          const registeredUsersStr = localStorage.getItem('taskmatrix_mock_users') || '[]';
-          const registeredUsers = JSON.parse(registeredUsersStr) as MockUser[];
-
-          if (registeredUsers.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-            set({ error: 'User with this email already exists', loading: false });
-            resolve(false);
-            return;
-          }
-
-          const newUser: MockUser = {
-            uid: 'mock_uid_' + Math.random().toString(36).substring(2, 11),
-            email,
-            name,
-            password,
-          };
-
-          registeredUsers.push(newUser);
-          localStorage.setItem('taskmatrix_mock_users', JSON.stringify(registeredUsers));
-
-          const userPayload: UserPayload = {
-            uid: newUser.uid,
-            email: newUser.email,
-            name: newUser.name,
-          };
-
-          localStorage.setItem('taskmatrix_mock_session', JSON.stringify(userPayload));
-          set({ user: userPayload, loading: false });
-          setAuthCookie(JSON.stringify(userPayload));
-          resolve(true);
-        } catch (err) {
-          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          set({ error: 'Mock Sign Up Error: ' + errorMessage, loading: false });
-          resolve(false);
-        }
-      }, 500);
-    });
+    set({ loading: false });
+    return false;
   },
 
   signIn: async (email, password) => {
     set({ loading: true, error: null });
 
-    if (isSupabaseConfigured && supabase) {
-      supabase.auth.signInWithPassword({
-        email,
-        password,
-      }).catch((err) => {
-        console.warn('Supabase background signin failed:', err);
-      });
+    if (!isSupabaseConfigured || !supabase) {
+      set({ error: 'Supabase credentials are not configured.', loading: false });
+      return false;
     }
 
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        try {
-          const registeredUsersStr = localStorage.getItem('taskmatrix_mock_users') || '[]';
-          const registeredUsers = JSON.parse(registeredUsersStr) as MockUser[];
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-          const matchedUser = registeredUsers.find(
-            (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-          );
+      if (error) {
+        set({ error: error.message, loading: false });
+        return false;
+      }
 
-          if (!matchedUser) {
-            set({ error: 'Invalid email or password', loading: false });
-            resolve(false);
-            return;
-          }
+      if (data?.user) {
+        const userPayload: UserPayload = {
+          uid: data.user.id,
+          email: data.user.email || '',
+          name: data.user.user_metadata?.name || 'Supabase User',
+        };
 
-          const userPayload: UserPayload = {
-            uid: matchedUser.uid,
-            email: matchedUser.email,
-            name: matchedUser.name,
-          };
+        set({ user: userPayload, loading: false });
+        setAuthCookie(JSON.stringify(userPayload));
+        return true;
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown login error';
+      set({ error: msg, loading: false });
+      return false;
+    }
 
-          localStorage.setItem('taskmatrix_mock_session', JSON.stringify(userPayload));
-          set({ user: userPayload, loading: false });
-          setAuthCookie(JSON.stringify(userPayload));
-          resolve(true);
-        } catch (err) {
-          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          set({ error: 'Mock Sign In Error: ' + errorMessage, loading: false });
-          resolve(false);
-        }
-      }, 500);
-    });
+    set({ loading: false });
+    return false;
   },
 
   signOut: async () => {
     set({ loading: true });
-    
+
     if (isSupabaseConfigured && supabase) {
       try {
         await supabase.auth.signOut();
       } catch (err) {
-        // ignore
+        console.error(err);
       }
     }
-    
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('taskmatrix_mock_session');
-    }
-    
+
     set({ user: null, loading: false });
     deleteAuthCookie();
   },
