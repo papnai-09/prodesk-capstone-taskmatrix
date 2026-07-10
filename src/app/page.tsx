@@ -20,10 +20,10 @@ export default function Home() {
   }, [user, loading, router]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
+    <div className="flex h-screen items-center justify-center bg-purple-50 text-slate-800">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-10 w-10 animate-spin text-violet-500" />
-        <p className="text-sm font-medium text-slate-400">Redirecting to TaskMatrix...</p>
+        <p className="text-sm font-medium text-slate-500">Redirecting to TaskMatrix...</p>
       </div>
     </div>
   );
